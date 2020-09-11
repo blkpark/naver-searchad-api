@@ -1,6 +1,13 @@
 # Naver SearchAd API
 
+## Environment
+
+* API_KEY
+* SECRET_KEY
+* CUSTOMER_ID
+
 ## APIS
+
 * AdExtension
   * list (by ids)
   * list (by label id)
