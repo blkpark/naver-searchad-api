@@ -3,7 +3,7 @@ package searchad
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -13,6 +13,7 @@ import (
 
 type SearchAd struct {
 	URL         string
+	Method      string
 	ContentType string
 	Timestamp   string
 	APIKey      string
@@ -36,7 +37,7 @@ func initialize(method string, path string, params url.Values, payload interface
 	sign := l.GetSignature(method, path, now)
 
 	m := &SearchAd{
-		l.Base + path, "application/json; charset=UTF-8", now, l.APIKey, l.CustomerID, sign, nil, nil,
+		l.Base + path, method, "application/json; charset=UTF-8", now, l.APIKey, l.CustomerID, sign, nil, nil,
 	}
 
 	if params != nil {
@@ -51,7 +52,7 @@ func initialize(method string, path string, params url.Values, payload interface
 }
 
 // send http request
-func (s SearchAd) request(method string) (*http.Response, error) {
+func (s SearchAd) request() *http.Response {
 
 	// add payload
 	buf := new(bytes.Buffer)
@@ -60,7 +61,7 @@ func (s SearchAd) request(method string) (*http.Response, error) {
 	}
 
 	// make new http request
-	req, _ := http.NewRequest(method, s.URL, buf)
+	req, _ := http.NewRequest(s.Method, s.URL, buf)
 
 	// add query string
 	if s.Params != nil {
@@ -76,22 +77,28 @@ func (s SearchAd) request(method string) (*http.Response, error) {
 
 	// send
 	client := &http.Client{}
-	res, _ := client.Do(req)
+	res, err := client.Do(req)
+
+	if err != nil {
+		// request
+		fmt.Println("----------- request ----------")
+		PrintInterface(s.Payload)
+		panic(err)
+	}
 
 	// error check
 	if res.StatusCode/100 != 2 {
-		statusCode := strconv.Itoa(res.StatusCode)
-
 		// response
 		r, _ := ioutil.ReadAll(res.Body)
 		defer res.Body.Close()
+		fmt.Println("----------- response ----------")
 		PrintJSON(r)
 
 		// request
-		b, _ := ioutil.ReadAll(req.Body)
-		PrintJSON(b)
+		fmt.Println("----------- request ----------")
+		PrintInterface(s.Payload)
 
-		return nil, errors.New(statusCode)
+		panic(nil)
 	}
-	return res, nil
+	return res
 }

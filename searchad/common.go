@@ -19,6 +19,11 @@ func PrintJSON(b []byte) {
 	fmt.Println(string(js))
 }
 
+func PrintInterface(i interface{}) {
+	b, _ := json.Marshal(i)
+	PrintJSON(b)
+}
+
 func Env(key string, value string) string {
 	v := os.Getenv(key)
 	if v == "" {
