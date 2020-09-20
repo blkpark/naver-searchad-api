@@ -1,9 +1,12 @@
 package searchad
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
+	"math/rand"
 	"os"
 )
 
@@ -31,4 +34,16 @@ func Env(key string, value string) string {
 	} else {
 		return v
 	}
+}
+
+func RandomString(l int) string {
+	if l == 0 {
+		return ""
+	}
+
+	c := int(math.Round(float64(l) / 2))
+	b := make([]byte, c)
+	rand.Read(b)
+	s := hex.EncodeToString(b)
+	return s[:l]
 }
