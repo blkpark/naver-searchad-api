@@ -15,7 +15,7 @@ type AdGroups struct {
 
 const BASE string = "/ncc/adgroups"
 
-// // GetAdgroups
+// GetAdgroups
 func GetAdgroups(params url.Values) []byte {
 	api := BASE
 	return searchad.GetAPI(api, params)
