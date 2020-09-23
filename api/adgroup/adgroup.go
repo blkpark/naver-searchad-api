@@ -6,13 +6,15 @@ import (
 	"github.com/blkpark/naver-searchad-api/searchad"
 )
 
+// AdGroups struct
 type AdGroups struct {
-	MobileChannelId string `json:"mobileChannelId"`
+	MobileChannelID string `json:"mobileChannelId"`
 	Name            string `json:"name"`
-	NccCampaignId   string `json:"nccCampaignId"`
-	PcChannelId     string `json:"pcChannelId"`
+	NccCampaignID   string `json:"nccCampaignId"`
+	PcChannelID     string `json:"pcChannelId"`
 }
 
+// BASE path
 const BASE string = "/ncc/adgroups"
 
 // GetAdgroups
