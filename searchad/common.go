@@ -8,6 +8,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"time"
 )
 
 func PrintJSON(b []byte) {
@@ -37,13 +38,19 @@ func Env(key string, value string) string {
 }
 
 func RandomString(l int) string {
+
+	// if length 0
 	if l == 0 {
 		return ""
 	}
 
+	// re-seed
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	// make string
 	c := int(math.Round(float64(l) / 2))
 	b := make([]byte, c)
-	rand.Read(b)
+	r.Read(b)
 	s := hex.EncodeToString(b)
 	return s[:l]
 }
