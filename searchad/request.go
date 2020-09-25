@@ -42,8 +42,22 @@ func PostAPI(path string, params url.Values, payload interface{}) []byte {
 	return data
 }
 
-func DeleteAPI() {
+func DeleteAPI(path string, params url.Values) []byte {
 
+	// get headers
+	s := initialize(http.MethodDelete, path, params, nil)
+
+	// send
+	res := s.request()
+
+	// read body
+	data, err := ioutil.ReadAll(res.Body)
+	defer res.Body.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	return data
 }
 
 func PutAPI(path string, params url.Values, payload interface{}) []byte {
