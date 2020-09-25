@@ -12,7 +12,11 @@ import (
 )
 
 func TestGetBusinessChannel(t *testing.T) {
+
+	// test create
 	created := create()
+
+	// test get
 	finded := get(created.NccBusinessChannelID)
 
 	if !reflect.DeepEqual(created.NccBusinessChannelID, finded.NccBusinessChannelID) {
@@ -22,6 +26,7 @@ func TestGetBusinessChannel(t *testing.T) {
 		panic(err)
 	}
 
+	// test update
 	marshaled, _ := json.Marshal(finded)
 	updated := update(marshaled)
 	findAgain := get(created.NccBusinessChannelID)
@@ -33,17 +38,22 @@ func TestGetBusinessChannel(t *testing.T) {
 		log.Fatal(msg)
 		panic(err)
 	}
+
+	// check delete
+
+	// check list
+	list()
+	listByChannelTp()
 }
 
 // GET /ncc/channels
 // https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fchannels
 func list() {
-	params := url.Values{}
-	r := List(params)
+	r := List(nil)
 	if len(r) < 1 {
 		panic(r)
 	}
-	searchad.PrintJSON(r)
+	//searchad.PrintJSON(r)
 }
 
 // POST /ncc/channels
@@ -59,10 +69,10 @@ func create() BusinessChannel {
 	site.Site = "http://www." + str + ".com"
 	newCh.BusinessInfo = site
 
-	r := Create(nil, newCh)
-	searchad.PrintJSON(r)
+	created := Create(nil, newCh)
+	//searchad.PrintJSON(created)
 
-	json.Unmarshal(r, &newCh)
+	json.Unmarshal(created, &newCh)
 
 	return newCh
 }
@@ -82,13 +92,13 @@ func update(b []byte) BusinessChannel {
 	params := url.Values{}
 	params.Add("fields", "name")
 
-	r := Update(params, bc, bc.NccBusinessChannelID)
-	searchad.PrintJSON(r)
+	updated := Update(params, bc, bc.NccBusinessChannelID)
+	//searchad.PrintJSON(updated)
 
-	rbc := BusinessChannel{}
-	json.Unmarshal(r, &rbc)
+	r := BusinessChannel{}
+	json.Unmarshal(updated, &r)
 
-	return rbc
+	return r
 }
 
 // PUT /ncc/channels/{businessChannelId}/inspect
@@ -111,14 +121,43 @@ func deleteByIDs() {
 
 // GET /ncc/channels{?channelTp}
 // https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fchannels%7B%3FchannelTp%7D
-func listByChannelTp() {
-	// TODO
+func listByChannelTp() []BusinessChannel {
+
+	// set channel type
+	params := url.Values{}
+	params.Add("channelTp", "SITE")
+
+	// get list
+	r := List(params)
+
+	// set return value
+	var chs []BusinessChannel
+	json.Unmarshal(r, &chs)
+
+	// for _, v := range chs {
+	// 	marshaled, _ := json.Marshal(v)
+	// 	searchad.PrintJSON(marshaled)
+	// }
+
+	return chs
 }
 
 // GET /ncc/channels{?ids}
 // https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fchannels%7B%3Fids%7D
-func listByIds() {
-	// TODO
+func listByIds() []BusinessChannel {
+
+	// set ids
+	params := url.Values{}
+	params.Add("ids", "")
+
+	// get list
+	r := List(params)
+
+	// set return value
+	var chs []BusinessChannel
+	json.Unmarshal(r, &chs)
+
+	return chs
 }
 
 // GET /ncc/channels/}{businessChannelId

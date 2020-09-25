@@ -1,6 +1,7 @@
 package businesschannel
 
 import (
+	"errors"
 	"net/url"
 
 	"github.com/blkpark/naver-searchad-api/searchad"
@@ -41,6 +42,21 @@ type BusinessChannel struct {
 // List
 func List(params url.Values) []byte {
 	api := BASE
+	channelTp := params.Get("channelTp")
+	ids := params.Get("ids")
+
+	if channelTp != "" && ids != "" {
+		msg := "have to send either channelTp or ids"
+		err := errors.New(msg)
+		panic(err)
+	}
+
+	if !checkSupportedChannelTp(channelTp) {
+		msg := "not supported channel type."
+		err := errors.New(msg)
+		panic(err)
+	}
+
 	return searchad.GetAPI(api, params)
 }
 
@@ -57,5 +73,20 @@ func Create(params url.Values, payload interface{}) []byte {
 func Update(params url.Values, payload interface{}, businessChannelID string) []byte {
 	api := BASE + "/" + businessChannelID
 	return searchad.PutAPI(api, params, payload)
+}
 
+func checkSupportedChannelTp(name string) bool {
+
+	if name == "" {
+		return true
+	}
+
+	types := []string{"SITE", "PHONE", "ADDRESS", "BOOKING", "TALK", "MALL", "CONTENTS", "PLACE", "CATALOG"}
+
+	for _, val := range types {
+		if val == name {
+			return true
+		}
+	}
+	return false
 }
