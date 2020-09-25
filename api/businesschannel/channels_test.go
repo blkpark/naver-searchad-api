@@ -40,20 +40,39 @@ func TestGetBusinessChannel(t *testing.T) {
 	}
 
 	// check delete
+	delete(created.NccBusinessChannelID)
 
 	// check list
 	list()
 	listByChannelTp()
+
+	// delete ids
+	// created channels
+	count := 3
+	var ids []string
+
+	for i := 0; i < count; i++ {
+		c := create()
+		ids = append(ids, c.NccBusinessChannelID)
+	}
+
+	listByIds(ids)
+	deleteByIDs(ids)
 }
 
 // GET /ncc/channels
 // https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fchannels
-func list() {
+func list() []BusinessChannel {
 	r := List(nil)
 	if len(r) < 1 {
 		panic(r)
 	}
-	//searchad.PrintJSON(r)
+
+	// set return value
+	var chs []BusinessChannel
+	json.Unmarshal(r, &chs)
+
+	return chs
 }
 
 // POST /ncc/channels
@@ -109,14 +128,29 @@ func requestInspect() {
 
 // DELETE /ncc/channels/{businessChannelId}
 // https://naver.github.io/searchad-apidoc/#/operations/DELETE/~2Fncc~2Fchannels~2F%7BbusinessChannelId%7D
-func delete() {
-	// TODO
+func delete(businessChannelID string) {
+	Delete(businessChannelID)
 }
 
 // DELETE /ncc/channels{?ids}
 // https://naver.github.io/searchad-apidoc/#/operations/DELETE/~2Fncc~2Fchannels%7B%3Fids%7D
-func deleteByIDs() {
-	// TODO
+func deleteByIDs(ids []string) {
+
+	if len(ids) < 1 {
+		msg := "have to send ids"
+		err := errors.New(msg)
+		panic(err)
+	}
+
+	// set params
+	params := url.Values{}
+
+	for _, v := range ids {
+		params.Add("ids", v)
+	}
+
+	r := DeleteIds(params)
+	searchad.PrintJSON(r)
 }
 
 // GET /ncc/channels{?channelTp}
@@ -144,14 +178,24 @@ func listByChannelTp() []BusinessChannel {
 
 // GET /ncc/channels{?ids}
 // https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fchannels%7B%3Fids%7D
-func listByIds() []BusinessChannel {
+func listByIds(ids []string) []BusinessChannel {
+
+	if len(ids) < 1 {
+		msg := "have to send ids"
+		err := errors.New(msg)
+		panic(err)
+	}
 
 	// set ids
 	params := url.Values{}
-	params.Add("ids", "")
+
+	for _, v := range ids {
+		params.Add("ids", v)
+	}
 
 	// get list
 	r := List(params)
+	// searchad.PrintJSON(r)
 
 	// set return value
 	var chs []BusinessChannel

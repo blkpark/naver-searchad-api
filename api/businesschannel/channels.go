@@ -75,6 +75,16 @@ func Update(params url.Values, payload interface{}, businessChannelID string) []
 	return searchad.PutAPI(api, params, payload)
 }
 
+func Delete(businessChannelID string) []byte {
+	api := BASE + "/" + businessChannelID
+	return searchad.DeleteAPI(api, nil)
+}
+
+func DeleteIds(params url.Values) []byte {
+	api := BASE
+	return searchad.DeleteAPI(api, params)
+}
+
 func checkSupportedChannelTp(name string) bool {
 
 	if name == "" {
