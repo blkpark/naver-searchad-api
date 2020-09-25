@@ -37,10 +37,10 @@ func Env(key string, value string) string {
 	}
 }
 
-func RandomString(l int) string {
+func RandomString(len int) string {
 
 	// if length 0
-	if l == 0 {
+	if len == 0 {
 		return ""
 	}
 
@@ -48,9 +48,9 @@ func RandomString(l int) string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	// make string
-	c := int(math.Round(float64(l) / 2))
+	c := int(math.Round(float64(len) / 2))
 	b := make([]byte, c)
 	r.Read(b)
 	s := hex.EncodeToString(b)
-	return s[:l]
+	return s[:len]
 }
