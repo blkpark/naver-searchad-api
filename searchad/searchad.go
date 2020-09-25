@@ -96,6 +96,7 @@ func (s SearchAd) request() *http.Response {
 
 		// request
 		fmt.Println("----------- request ----------")
+		fmt.Println(s.Method, s.URL, s.Params)
 		PrintInterface(s.Payload)
 
 		panic(nil)
