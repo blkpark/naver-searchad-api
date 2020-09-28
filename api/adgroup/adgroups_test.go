@@ -1,39 +1,46 @@
 package adgroup
 
 import (
-	"encoding/json"
 	"testing"
 
-	"github.com/blkpark/naver-searchad-api/api/businesschannel"
+	"github.com/blkpark/naver-searchad-api/searchad"
 )
 
 func TestAdGroup(t *testing.T) {
-
+	get()
 }
 
 func get() []byte {
-	r := GetAdgroups(nil)
-	if len(r) < 1 {
-		panic(r)
+	res, err := List(nil)
+
+	if err != nil {
+		panic(err)
 	}
-	return r
+
+	if len(res) < 1 {
+		panic(res)
+	}
+
+	searchad.PrintJSON(res)
+	return res
 }
 
-func post() []byte {
+// func post() []byte {
 
-	// crete businesschannel
-	b := businesschannel.GetBusinessChannel()
-	bi :=
-		json.Unmarshal(b, i)
+// 	// crete businesschannel
+// 	var i interface{}
 
-	adg := &AdGroups{}
-	adg.MobileChannelId = ""
-	adg.Name = ""
-	adg.NccCampaignId = ""
-	adg.PcChannelId = ""
-	r := PostAdgroups(nil, adg)
-	if len(r) < 1 {
-		panic(r)
-	}
-	return r
-}
+// 	b, err := businesschannel.List(nil)
+// 	bi := json.Unmarshal(b, &i)
+
+// adg := &AdGroups{}
+// adg.MobileChannelId = ""
+// adg.Name = ""
+// adg.NccCampaignId = ""
+// adg.PcChannelId = ""
+// r := PostAdgroups(nil, adg)
+// if len(r) < 1 {
+// 	panic(r)
+// }
+// return r
+// }
