@@ -39,8 +39,14 @@ type BusinessChannel struct {
 	StatusReason         string `json:"statusReason,omitempty"`
 }
 
-// List
-func List(params url.Values) []byte {
+// List returns the list of business channel.
+// Send a channelTp to the parameter, it returns the business channel list of channel type.
+// Send a ids to the parameter, it returns the business channel list of input business channel ids.
+
+// GET /ncc/channels
+// https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fchannels
+//
+func List(params url.Values) ([]byte, error) {
 	api := BASE
 	channelTp := params.Get("channelTp")
 	ids := params.Get("ids")
@@ -57,32 +63,82 @@ func List(params url.Values) []byte {
 		panic(err)
 	}
 
-	return searchad.GetAPI(api, params)
+	res, err := searchad.GetAPI(api, params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-func Get(nccBusinessChannelID string) []byte {
+func Get(nccBusinessChannelID string) ([]byte, error) {
 	api := BASE + "/" + nccBusinessChannelID
-	return searchad.GetAPI(api, nil)
+	res, err := searchad.GetAPI(api, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-func Create(params url.Values, payload interface{}) []byte {
+func Create(params url.Values, payload interface{}) ([]byte, error) {
 	api := BASE
-	return searchad.PostAPI(api, params, payload)
+	res, err := searchad.PostAPI(api, params, payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-func Update(params url.Values, payload interface{}, businessChannelID string) []byte {
+func Update(params url.Values, payload interface{}, businessChannelID string) ([]byte, error) {
 	api := BASE + "/" + businessChannelID
-	return searchad.PutAPI(api, params, payload)
+	res, err := searchad.PutAPI(api, params, payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-func Delete(businessChannelID string) []byte {
+// DELETE /ncc/channels{?ids}
+// https://naver.github.io/searchad-apidoc/#/operations/DELETE/~2Fncc~2Fchannels%7B%3Fids%7D
+func Delete(businessChannelID string) ([]byte, error) {
 	api := BASE + "/" + businessChannelID
-	return searchad.DeleteAPI(api, nil)
+	res, err := searchad.DeleteAPI(api, nil)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
-func DeleteIds(params url.Values) []byte {
+// DeleteIds Remove business channels in id list.
+//
+// Request: DELETE /ncc/channels/{businessChannelId}
+//
+// Ref: https://naver.github.io/searchad-apidoc/#/operations/DELETE/~2Fncc~2Fchannels~2F%7BbusinessChannelId%7D
+func DeleteIds(params url.Values) ([]byte, error) {
 	api := BASE
-	return searchad.DeleteAPI(api, params)
+
+	// check parameters.
+	if params.Get("ids") == "" {
+		msg := "have to send ids"
+		err := errors.New(msg)
+		return nil, err
+	}
+
+	res, err := searchad.DeleteAPI(api, params)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 func checkSupportedChannelTp(name string) bool {
