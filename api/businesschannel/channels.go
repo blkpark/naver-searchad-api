@@ -11,7 +11,20 @@ import (
 const BASE string = "/ncc/channels"
 
 type Site struct {
-	Site string `json:"site"`
+	Site                 string `json:"site"`
+	IsNaverLogin         int    `json:"isNaverLogin,omitempty"`
+	IsMobileNaverLogin   int    `json:"isMobileNaverLogin,omitempty"`
+	NaAccountID          string `json:"naAccountId,omitempty"`
+	NaAccountType        int    `json:"naAccountType,omitempty"`
+	UseNaverPayNaScript  int    `json:"useNaverPayNaScript,omitempty"`
+	UseStoreFarmNaScript int    `json:"useStoreFarmNaScript,omitempty"`
+	IsNaverPay           int    `json:"isNaverPay,omitempty"`
+	IsMobileNaverPay     int    `json:"isMobileNaverPayomitempty"`
+	UseSaNaScript        int    `json:"useSaNaScript,omitempty"`
+	MobileCertStatus     int    `json:"mobileCertStatus,omitempty"`
+	IsStoreFarm          int    `json:"isStoreFarm,omitempty"`
+	ThumbnailPath        string `json:"thumbnailPath,omitempty"`
+	OriginalPath         string `json:"originalPath,omitempty"`
 }
 
 // BusinessChannel
