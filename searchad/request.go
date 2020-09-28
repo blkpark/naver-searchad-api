@@ -6,7 +6,8 @@ import (
 	"net/url"
 )
 
-func GetAPI(path string, params url.Values) []byte {
+// GetAPI return http GET reponse.
+func GetAPI(path string, params url.Values) ([]byte, error) {
 
 	// get headers
 	s := initialize(http.MethodGet, path, params, nil)
@@ -18,13 +19,14 @@ func GetAPI(path string, params url.Values) []byte {
 	data, err := ioutil.ReadAll(res.Body)
 	defer res.Body.Close()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return data
+	return data, nil
 }
 
-func PostAPI(path string, params url.Values, payload interface{}) []byte {
+// PostAPI return http post response.
+func PostAPI(path string, params url.Values, payload interface{}) ([]byte, error) {
 
 	// get headers
 	s := initialize(http.MethodPost, path, params, payload)
@@ -35,14 +37,16 @@ func PostAPI(path string, params url.Values, payload interface{}) []byte {
 	// read body
 	data, err := ioutil.ReadAll(res.Body)
 	defer res.Body.Close()
+
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return data
+	return data, nil
 }
 
-func DeleteAPI(path string, params url.Values) []byte {
+// DeleteAPI return http delete response.
+func DeleteAPI(path string, params url.Values) ([]byte, error) {
 
 	// get headers
 	s := initialize(http.MethodDelete, path, params, nil)
@@ -53,14 +57,16 @@ func DeleteAPI(path string, params url.Values) []byte {
 	// read body
 	data, err := ioutil.ReadAll(res.Body)
 	defer res.Body.Close()
+
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return data
+	return data, nil
 }
 
-func PutAPI(path string, params url.Values, payload interface{}) []byte {
+// PutAPI return http put response.
+func PutAPI(path string, params url.Values, payload interface{}) ([]byte, error) {
 
 	// get headers
 	s := initialize(http.MethodPut, path, params, payload)
@@ -72,8 +78,8 @@ func PutAPI(path string, params url.Values, payload interface{}) []byte {
 	data, err := ioutil.ReadAll(res.Body)
 	defer res.Body.Close()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return data
+	return data, nil
 }
