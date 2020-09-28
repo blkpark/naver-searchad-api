@@ -2,6 +2,7 @@ package businesschannel
 
 import (
 	"errors"
+	"fmt"
 	"net/url"
 
 	"github.com/blkpark/naver-searchad-api/searchad"
@@ -139,6 +140,13 @@ func DeleteIds(params url.Values) ([]byte, error) {
 	}
 
 	return res, nil
+}
+
+//RequestInspect return reinspect of business channel.
+func RequestInspect(businessId string) {
+	api := BASE + "/" + businessId + "/inspect"
+	fmt.Println(api)
+	// TODO
 }
 
 func checkSupportedChannelTp(name string) bool {

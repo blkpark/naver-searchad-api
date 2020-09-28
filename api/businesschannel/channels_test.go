@@ -11,7 +11,7 @@ import (
 	"github.com/blkpark/naver-searchad-api/searchad"
 )
 
-func TestGetBusinessChannel(t *testing.T) {
+func TestBusinessChannel(t *testing.T) {
 
 	// test create
 	created := create()
@@ -225,7 +225,7 @@ func listByIds(ids []string) []BusinessChannel {
 	return chs
 }
 
-// GET /ncc/channels/}{businessChannelId
+// GET /ncc/channels/{businessChannelId}
 // https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fchannels~2F%7BbusinessChannelId%7D
 func get(businessChannelID string) BusinessChannel {
 
@@ -241,10 +241,4 @@ func get(businessChannelID string) BusinessChannel {
 	b := BusinessChannel{}
 	json.Unmarshal(r, &b)
 	return b
-}
-
-// GET /ncc/purchasable-place-channels
-// https://naver.github.io/searchad-apidoc/#/operations/GET/~2Fncc~2Fpurchasable-place-channels
-func getPurchasablePlaceChannels() {
-	// TODO
 }
